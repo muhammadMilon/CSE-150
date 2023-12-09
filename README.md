@@ -1,129 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSE-150 - Simple Snake Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
+# CSE-150 - Simple Snake Game
 
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-        }
+## Project Overview
 
-        section {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+This repository contains the source code and documentation for the "Simple Snake Game" project developed as part of the Project Work 1 course (CSE 150). The game is implemented in C++ and designed to run as a console application on a computer.
 
-        h1, h2, h3 {
-            color: #333;
-        }
+## Game Description
 
-        h1 {
-            margin-bottom: 10px;
-        }
+The "Simple Snake Game" is a classic snake game where players control a snake on a grid, maneuvering it to consume randomly appearing food items. As the snake consumes food, it grows longer, presenting a challenge to the player. The main goal is to achieve the highest score possible by collecting food without colliding with the snake's own body.
 
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #333;
-            padding-bottom: 5px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
+## Controls
 
-        ul {
-            list-style: none;
-            padding: 0;
-        }
+- Arrow keys: Up, Down, Left, Right - for controlling the snake's direction.
 
-        li {
-            margin-bottom: 5px;
-        }
+## Obstacle
 
-        #learning-outcomes {
-            margin-top: 20px;
-        }
+The primary obstacle in the game is the snake's own body. Colliding with the snake's body leads to the end of the game.
 
-        #team-members {
-            margin-top: 20px;
-        }
+## Development Goals
 
-        #acknowledgments {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
+The key development goals include implementing essential game features such as user input handling, random food generation, snake movement mechanics, collision detection, and a scoring system. The project emphasizes the use of fundamental programming concepts and relevant data structures.
 
-    <header>
-        <h1>CSE-150 - Simple Snake Game</h1>
-    </header>
+## Learning Outcomes
 
-    <section>
-        <h2>Project Overview</h2>
-        <p>This repository contains the source code and documentation for the "Simple Snake Game" project developed as part of the Project Work 1 course (CSE 150). The game is implemented in C++ and designed to run as a console application on a computer.</p>
-    </section>
+1. **Fundamental Programming Concepts:** Gain a deeper understanding and application of fundamental programming concepts in a real-world project setting.
+2. **Problem-Solving Skills:** Develop problem-solving skills through the challenges of game development, including handling user input and designing game mechanics.
+3. **User Input Handling and Game Mechanics:** Acquire experience in handling user input and implementing core game mechanics for an interactive and engaging user experience.
+4. **Algorithm Implementation:** Implement basic algorithms for collision detection and score tracking, enhancing algorithmic thinking skills.
+5. **Teamwork and Collaboration:** Enhance teamwork and collaboration skills through group project work as part of Team TwoPointers.
 
-    <section>
-        <h2>Game Description</h2>
-        <p>The "Simple Snake Game" is a classic snake game where players control a snake on a grid, maneuvering it to consume randomly appearing food items. As the snake consumes food, it grows longer, presenting a challenge to the player. The main goal is to achieve the highest score possible by collecting food without colliding with the snake's own body.</p>
-    </section>
+## Team Members
 
-    <section>
-        <h2>Controls</h2>
-        <p>Arrow keys: Up, Down, Left, Right - for controlling the snake's direction.</p>
-    </section>
+- **Md. Milon Mia (Reg: 2021331098)**
+- **Md. Forhad Hasan Jewel (Reg: 2021331066)**
 
-    <section>
-        <h2>Obstacle</h2>
-        <p>The primary obstacle in the game is the snake's own body. Colliding with the snake's body leads to the end of the game.</p>
-    </section>
+## Getting Started
 
-    <section>
-        <h2>Development Goals</h2>
-        <p>The key development goals include implementing essential game features such as user input handling, random food generation, snake movement mechanics, collision detection, and a scoring system. The project emphasizes the use of fundamental programming concepts and relevant data structures.</p>
-    </section>
+To run the Simple Snake Game on your local machine, follow the instructions in the Documentation provided.
 
-    <section id="learning-outcomes">
-        <h2>Learning Outcomes</h2>
-        <ul>
-            <li>Fundamental Programming Concepts: Gain a deeper understanding and application of fundamental programming concepts in a real-world project setting.</li>
-            <li>Problem-Solving Skills: Develop problem-solving skills through the challenges of game development, including handling user input and designing game mechanics.</li>
-            <li>User Input Handling and Game Mechanics: Acquire experience in handling user input and implementing core game mechanics for an interactive and engaging user experience.</li>
-            <li>Algorithm Implementation: Implement basic algorithms for collision detection and score tracking, enhancing algorithmic thinking skills.</li>
-            <li>Teamwork and Collaboration: Enhance teamwork and collaboration skills through group project work as part of Team TwoPointers.</li>
-        </ul>
-    </section>
+## Acknowledgments
 
-    <section id="team-members">
-        <h2>Team Members</h2>
-        <ul>
-            <li>Md. Milon Mia (Reg: 2021331098)</li>
-            <li>Md. Forhad Hasan Jewel (Reg: 2021331066)</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Getting Started</h2>
-        <p>To run the Simple Snake Game on your local machine, follow the instructions in the Documentation provided.</p>
-    </section>
-
-    <section id="acknowledgments">
-        <h2>Acknowledgments</h2>
-        <p>We would like to express our gratitude to the course instructors and our peers for their support and feedback throughout the development of this project.</p>
-    </section>
-
-</body>
-</html>
+We would like to express our gratitude to the course instructors and our peers for their support and feedback throughout the development of this project.
