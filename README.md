@@ -33,9 +33,6 @@ The key development goals include implementing essential game features such as u
 - **Md. Milon Mia (Reg: 2021331098)**
 - **Md. Forhad Hasan Jewel (Reg: 2021331066)**
 
-## Getting Started
-
-To run the Simple Snake Game on your local machine, follow the instructions in the Documentation provided.
 
 ## Acknowledgments
 
