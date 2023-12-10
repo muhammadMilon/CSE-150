@@ -34,7 +34,7 @@ The key development goals include implementing essential game features such as u
 
 ## Team Members
 
-- **Md. Milon Mia (Reg: 2021331098)**
+- **Md. Milon Mia (Reg: 2021331098) - [Milon](https://github.com/muhammadMilon)**
 - **Md. Forhad Hasan Jewel (Reg: 2021331066) - [Forhad](https://github.com/2021331066-forhad)**
 
 ## Acknowledgments
