@@ -1,4 +1,4 @@
-# CSE-150 - Simple Snake Game
+# CSE-150 -> Simple Snake Game
 
 ## Project Overview
 
