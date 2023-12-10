@@ -23,9 +23,13 @@ The key development goals include implementing essential game features such as u
 ## Learning Outcomes
 
 1. **Fundamental Programming Concepts:** Gain a deeper understanding and application of fundamental programming concepts in a real-world project setting.
+
 2. **Problem-Solving Skills:** Develop problem-solving skills through the challenges of game development, including handling user input and designing game mechanics.
+
 3. **User Input Handling and Game Mechanics:** Acquire experience in handling user input and implementing core game mechanics for an interactive and engaging user experience.
+
 4. **Algorithm Implementation:** Implement basic algorithms for collision detection and score tracking, enhancing algorithmic thinking skills.
+
 5. **Teamwork and Collaboration:** Enhance teamwork and collaboration skills through group project work as part of Team TwoPointers.
 
 ## Team Members
