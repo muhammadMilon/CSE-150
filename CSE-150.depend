@@ -1,6 +1,0 @@
-# depslib dependency file v1.0
-1702137626 source:d:\cse-150\main.cpp
-	<iostream>
-	<conio.h>
-	<Windows.h>
-
