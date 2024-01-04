@@ -1,16 +1,16 @@
-#include<iostream>
-#include<conio.h>
-#include<Windows.h>
-#include<thread>
-#include<chrono>
+#include <iostream>
+#include <Windows.h>
+#include <conio.h>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
 enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
 bool gameOver;
-const int height = 23; 
-const int width = 23;  
+const int height = 23;
+const int width = 23;
 int headX, headY, fruitX, fruitY, score;
 int tailx[100], taily[100];
 int tail_len;
@@ -31,15 +31,13 @@ int main()
     if (start == 's') {
         setup();
         while (!gameOver) {
+            
             draw();
             input();
             logic();
 
             // Sleep for 100 milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-            // Clear the console
-            system("cls");
         }
         // Display the final score
         cout << "\t-------------------------------" << endl;
@@ -62,10 +60,13 @@ void setup()
     score = 0;
 }
 
-
 void draw()
 {
-    cout << "\x1B[2J\x1B[H";
+    // Get the console handle
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Set the cursor position to the top-left corner
+    SetConsoleCursorPosition(console, {0, 0});
 
     // Upper Border
     cout << "\t\t";
@@ -142,7 +143,6 @@ void draw()
     cout << "\t\t\tScore: " << score << endl;
 }
 
-
 void input()
 {
     if (_kbhit())
@@ -164,7 +164,6 @@ void input()
             break;
         }
 }
-
 
 void logic()
 {
