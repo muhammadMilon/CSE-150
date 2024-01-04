@@ -9,8 +9,8 @@ using namespace std;
 enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
 bool gameOver;
-const int height = 23;  // Increased height
-const int width = 23;   // Increased width
+const int height = 23; 
+const int width = 23;  
 int headX, headY, fruitX, fruitY, score;
 int tailx[100], taily[100];
 int tail_len;
@@ -165,7 +165,6 @@ void input()
         }
 }
 
-// ... (other code remains the same)
 
 void logic()
 {
