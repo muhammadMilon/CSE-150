@@ -1,14 +1,16 @@
 #include<iostream>
 #include<conio.h>
 #include<Windows.h>
+#include<thread>
+#include<chrono>
 
 using namespace std;
 
-enum Direction{STOP = 0, LEFT, RIGHT, UP, DOWN};
+enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
 bool gameOver;
-const int height = 20;
-const int width = 20;
+const int height = 23;  // Increased height
+const int width = 23;   // Increased width
 int headX, headY, fruitX, fruitY, score;
 int tailx[100], taily[100];
 int tail_len;
@@ -26,15 +28,17 @@ int main()
     cout << "\t-------------------------------" << endl;
     cout << "\tPress 's' to start: ";
     cin >> start;
-    if(start == 's')
-        {
+    if (start == 's') {
         setup();
-        while(!gameOver)
-        {
+        while (!gameOver) {
             draw();
             input();
             logic();
-            Sleep(30);
+
+            // Sleep for 100 milliseconds
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+            // Clear the console
             system("cls");
         }
         // Display the final score
@@ -47,47 +51,54 @@ int main()
     return 0;
 }
 
-
-
 void setup()
 {
     gameOver = false;
     dir = STOP;
-    headX = width/2;
-    headY = height/2;
-    fruitX = rand()%width;
-    fruitY = rand()%height;
+    headX = width / 2;
+    headY = height / 2;
+    fruitX = rand() % width;
+    fruitY = rand() % height;
     score = 0;
 }
 
+
 void draw()
 {
-    system("cls");
-    // Uper Border
+    cout << "\x1B[2J\x1B[H";
+
+    // Upper Border
     cout << "\t\t";
-    for(int i = 0; i < width-8; i++)
+    for (int i = 0; i < width; i++)
     {
         cout << "# ";
     }
     cout << endl;
 
-    // Snake, fruit, space and side borders
-    for(int i = 0; i < height; i++)
+    // Snake, fruit, space, and side borders
+    for (int i = 0; i < height; i++)
     {
-        for(int j = 0; j < width; j++)
+        for (int j = 0; j < width; j++)
         {
             // left border
-            if(j == 0)
+            if (j == 0)
             {
                 cout << "\t\t#";
             }
+
+            // extra border in the middle
+            if (j == (2 * width) / 3 && (5 < i && i < 15))
+            {
+                cout << "   #";
+            }
+
             // snake head
-            if(i == headY && j == headX)
+            if (i == headY && j == headX)
             {
                 cout << "O";
             }
             // fruit
-            else if(i == fruitY && j == fruitX)
+            else if (i == fruitY && j == fruitX)
             {
                 cout << "*";
             }
@@ -96,31 +107,34 @@ void draw()
             {
                 bool print = false;
                 // tail
-                for(int k = 0; k < tail_len; k++)
+                for (int k = 0; k < tail_len; k++)
                 {
-                    if(tailx[k] == j && taily[k] == i)
+                    if (tailx[k] == j && taily[k] == i)
                     {
                         cout << "o";
                         print = true;
                     }
                 }
                 // space
-                if(!print)
+                if (!print)
                 {
                     cout << " ";
                 }
             }
+
             // right border
-            if(j == width-1)
+            if (j == width - 1)
             {
-                cout << " #";
+                cout << "\t\t    #";
             }
         }
+
         cout << endl;
     }
+
     // Lower Border
     cout << "\t\t";
-    for(int i = 0; i < width-8; i++)
+    for (int i = 0; i < width; i++)
     {
         cout << "# ";
     }
@@ -131,25 +145,27 @@ void draw()
 
 void input()
 {
-    if(_kbhit())
-    switch (getch())
-    {
-    case 'a':
-        dir = LEFT;
-        break;
-    case 'd':
-        dir = RIGHT;
-        break;
-    case 'w':
-        dir = UP;
-        break;
-    case 's':
-        dir = DOWN;
-        break;
-    default:
-        break;
-    }
+    if (_kbhit())
+        switch (_getch())
+        {
+        case 'a':
+            dir = LEFT;
+            break;
+        case 'd':
+            dir = RIGHT;
+            break;
+        case 'w':
+            dir = UP;
+            break;
+        case 's':
+            dir = DOWN;
+            break;
+        default:
+            break;
+        }
 }
+
+// ... (other code remains the same)
 
 void logic()
 {
@@ -159,7 +175,7 @@ void logic()
     int prev2x, prev2y;
     tailx[0] = headX;
     taily[0] = headY;
-    for(int i = 1; i < tail_len; i++)
+    for (int i = 1; i < tail_len; i++)
     {
         prev2x = tailx[i];
         prev2y = taily[i];
@@ -188,39 +204,34 @@ void logic()
         break;
     }
 
+    // check if snake touches the middle border
+    if (headX == (2 * width) / 3 && (5 < headY && headY < 15))
+    {
+        gameOver = true;
+        return;
+    }
+
     // touch walls
-    if(headX >= width)
+    if (headX >= width || headX < 0 || headY >= height || headY < 0)
     {
-        headX = 0;
-    }
-    else if(headX < 0)
-    {
-        headX = width - 1;
-    }
-    if(headY >= height)
-    {
-        headY = 0;
-    }
-    else if(headY < 0)
-    {
-        headY = height - 1;
+        gameOver = true;
     }
 
     // snake bite itself
-    for(int i = 0; i < tail_len; i++)
+    for (int i = 0; i < tail_len; i++)
     {
-        if(tailx[i] == headX && taily[i] == headY)
+        if (tailx[i] == headX && taily[i] == headY)
         {
             gameOver = true;
         }
     }
 
     // snake eat fruit
-    if(headX == fruitX && headY == fruitY)
+    if (headX == fruitX && headY == fruitY)
     {
         score += 10;
-        fruitX = rand()%width;
-        fruitY = rand()%height;
+        fruitX = rand() % width;
+        fruitY = rand() % height;
         tail_len++;
     }
 }
