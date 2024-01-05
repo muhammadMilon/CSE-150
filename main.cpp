@@ -177,7 +177,6 @@ void input()
             break;
         }
 }
-
 void logic()
 {
     // tail logic
