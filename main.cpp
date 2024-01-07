@@ -11,7 +11,7 @@ Direction dir;
 bool gameOver;
 const int height = 23;
 const int width = 40;
-int headX, headY, fruitX, fruitY, score;
+int headX, headY, fruitX, fruitY, specialFruitX, specialFruitY, score;
 int tailx[100], taily[100];
 int tail_len;
 
@@ -67,6 +67,8 @@ void setup()
     headY = height / 2;
     fruitX = rand() % width;
     fruitY = rand() % height;
+    specialFruitX = -1;
+    specialFruitY = -1;
     score = 0;
 }
 
@@ -109,6 +111,11 @@ void draw()
                 if (i == headY && j == headX)
                 {
                     gameBoard += "O";
+                }
+                // special fruit
+                else if (i == specialFruitY && j == specialFruitX)
+                {
+                    gameBoard += "S";
                 }
                 // fruit
                 else if (i == fruitY && j == fruitX)
@@ -249,8 +256,26 @@ void logic()
     if (headX == fruitX && headY == fruitY)
     {
         score += 10;
-        fruitX = rand() % width;
-        fruitY = rand() % height;
         tail_len++;
+        if (score % 30 == 0 && score > 0)  // Check if the score is a multiple of 30 and greater than 0
+        {
+            // Generate a special fruit
+            specialFruitX = rand() % width;
+            specialFruitY = rand() % height;
+        }
+        else
+        {
+            // Generate a normal fruit
+            fruitX = rand() % width;
+            fruitY = rand() % height;
+        }
+    }
+
+    // snake eat special fruit
+    if (headX == specialFruitX && headY == specialFruitY)
+    {
+        score += 50;
+        specialFruitX = -1; // Reset special fruit position
+        specialFruitY = -1;
     }
 }
