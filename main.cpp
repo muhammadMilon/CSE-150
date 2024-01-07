@@ -20,6 +20,7 @@ void draw();
 void input();
 void logic();
 
+
 int main()
 {
     char start;
@@ -39,8 +40,11 @@ int main()
             input();
             logic();
 
-            // Sleep for 100 milliseconds
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // Calculate delay based on the score
+            int delay = max(20, 400 - (score * 4)); // Ensure a minimum delay
+
+            // Sleep for the calculated duration
+            std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 
             // Clear the screen before redrawing in the next iteration
             system("cls");
