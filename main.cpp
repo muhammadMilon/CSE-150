@@ -10,7 +10,7 @@ enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
 bool gameOver;
 const int height = 23;
-const int width = 23;
+const int width = 40;
 int headX, headY, fruitX, fruitY, score;
 int tailx[100], taily[100];
 int tail_len;
@@ -19,7 +19,6 @@ void setup();
 void draw();
 void input();
 void logic();
-
 
 int main()
 {
@@ -60,7 +59,6 @@ int main()
     return 0;
 }
 
-
 void setup()
 {
     gameOver = false;
@@ -84,81 +82,87 @@ void draw()
     string gameBoard = "\t\t";
 
     // Upper Border
+    gameBoard += "\xC9";
     for (int i = 0; i < width; i++)
     {
-        gameBoard += "# ";
+        gameBoard += "\xCD";
     }
-    gameBoard += "\n";
+    gameBoard += "\xBB\n";
 
     // Snake, fruit, space, and side borders
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width; j++)
+        // left border
+        gameBoard += "\t\t\xBA";
+
+        // extra border in the middle
+        if ((2 * width) / 3 == 0 && (5 <= i && i <= 15))
         {
-            // left border
-            if (j == 0)
+            gameBoard += "\xB3";
+        }
+        else
+        {
+            // snake head, fruit, space, snake tail
+            for (int j = 0; j < width; j++)
             {
-                gameBoard += "\t\t#";
-            }
-
-            // extra border in the middle
-            if (j == (2 * width) / 3 && (5 < i && i < 15))
-            {
-                gameBoard += "   #";
-            }
-
-            // snake head
-            if (i == headY && j == headX)
-            {
-                gameBoard += "O";
-            }
-            // fruit
-            else if (i == fruitY && j == fruitX)
-            {
-                gameBoard += "*";
-            }
-            // space, snake tail
-            else
-            {
-                bool print = false;
-                // tail
-                for (int k = 0; k < tail_len; k++)
+                // snake head
+                if (i == headY && j == headX)
                 {
-                    if (tailx[k] == j && taily[k] == i)
+                    gameBoard += "O";
+                }
+                // fruit
+                else if (i == fruitY && j == fruitX)
+                {
+                    gameBoard += "*";
+                }
+                // space, snake tail
+                else
+                {
+                    bool print = false;
+                    // tail
+                    for (int k = 0; k < tail_len; k++)
                     {
-                        gameBoard += "o";
-                        print = true;
+                        if (tailx[k] == j && taily[k] == i)
+                        {
+                            gameBoard += "o";
+                            print = true;
+                        }
+                    }
+                    // space
+                    if (!print)
+                    {
+                        // right border
+                        if (j == width - 1 && (2 * width) / 3 == 0 && (5 <= i && i <= 15))
+                        {
+                            gameBoard += "\xB3";
+                        }
+                        else
+                        {
+                            gameBoard += " ";
+                        }
                     }
                 }
-                // space
-                if (!print)
-                {
-                    gameBoard += " ";
-                }
-            }
-
-            // right border
-            if (j == width - 1)
-            {
-                gameBoard += "\t\t    #";
             }
         }
 
+        // right border for the lower part of the extra border
+        gameBoard += "\xBA";
         gameBoard += "\n";
     }
 
     // Lower Border
-    gameBoard += "\t\t";
+    gameBoard += "\t\t\xC8";
     for (int i = 0; i < width; i++)
     {
-        gameBoard += "# ";
+        gameBoard += "\xCD";
     }
-    gameBoard += "\n";
+    gameBoard += "\xBC\n";
     gameBoard += "\t\t\tScore: " + to_string(score) + "\n";
 
     // Display the entire game board at once
     cout << gameBoard;
 }
+
 
 void input()
 {
@@ -181,6 +185,7 @@ void input()
             break;
         }
 }
+
 void logic()
 {
     // tail logic
@@ -219,7 +224,7 @@ void logic()
     }
 
     // check if snake touches the middle border
-    if (headX == (2 * width) / 3 && (5 < headY && headY < 15))
+    if (headX == (2 * width) / 3 && (5 <= headY && headY <= 15))
     {
         gameOver = true;
         return;
