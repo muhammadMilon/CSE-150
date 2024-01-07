@@ -158,11 +158,11 @@ void draw()
     }
     gameBoard += "\xBC\n";
     gameBoard += "\t\t\tScore: " + to_string(score) + "\n";
+    gameBoard += "\t\t\tControls: a=left, d=right, w=up, s=down\n";
 
     // Display the entire game board at once
     cout << gameBoard;
 }
-
 
 void input()
 {
