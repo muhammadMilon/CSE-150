@@ -74,12 +74,13 @@ int main()
         PlaySound("end_game.wav", NULL, SND_FILENAME);
 
         // Display the final score
-        cout << "\t-------------------------------" << endl;
-        cout << "\t\t Game Over!" << endl;
+        cout << "\t--------------------------------------------" << endl;
+        cout << "\t\t Game Over!" << endl<<endl;
         cout << "\t\t Congratulations! Your Score: " << score << endl;
-        cout << "\t-------------------------------" << endl;
+        cout << "\t--------------------------------------------" << endl;
     }
 
+    getch();
     return 0;
 }
 
