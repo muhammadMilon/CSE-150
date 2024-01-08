@@ -1,5 +1,7 @@
 #include <iostream>
 #include <Windows.h>
+#include <MMSystem.h>
+#include <mmsystem.h>
 #include <conio.h>
 #include <thread>
 #include <chrono>
@@ -9,16 +11,29 @@ using namespace std;
 enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
 bool gameOver;
-const int height = 23;
-const int width = 40;
+const int height = 20;
+const int width = 30;
 int headX, headY, fruitX, fruitY, specialFruitX, specialFruitY, score;
 int tailx[100], taily[100];
 int tail_len;
+int fruitsEaten;
 
 void setup();
 void draw();
 void input();
 void logic();
+void playBackgroundMusic(const char* musicFileName);
+void playSound(const char* soundFileName);
+
+void playBackgroundMusic(const char* musicFileName)
+{
+    PlaySound(musicFileName, NULL, SND_ASYNC | SND_LOOP);
+}
+
+void playSound(const char* soundFileName)
+{
+    PlaySound(soundFileName, NULL, SND_ASYNC);
+}
 
 int main()
 {
@@ -30,11 +45,14 @@ int main()
     cin >> start;
     if (start == 's') {
         setup();
+       playBackgroundMusic("snake_music.wav");
 
         // Clear the screen once before entering the game loop
         system("cls");
 
         while (!gameOver) {
+               // playBackgroundMusic("hissing.wav");
+
             draw();
             input();
             logic();
@@ -48,6 +66,12 @@ int main()
             // Clear the screen before redrawing in the next iteration
             system("cls");
         }
+
+        // Stop background music
+        PlaySound(NULL, NULL, SND_ASYNC);
+
+        // Play the "end_game.wav" sound only once when the game is over
+        PlaySound("end_game.wav", NULL, SND_FILENAME);
 
         // Display the final score
         cout << "\t-------------------------------" << endl;
@@ -70,6 +94,7 @@ void setup()
     specialFruitX = -1;
     specialFruitY = -1;
     score = 0;
+    fruitsEaten = 0;
 }
 
 void draw()
@@ -195,7 +220,6 @@ void input()
 
 void logic()
 {
-    // tail logic
     int prevx = tailx[0];
     int prevy = taily[0];
     int prev2x, prev2y;
@@ -211,7 +235,6 @@ void logic()
         prevy = prev2y;
     }
 
-    // direction logic
     switch (dir)
     {
     case LEFT:
@@ -230,20 +253,17 @@ void logic()
         break;
     }
 
-    // check if snake touches the middle border
     if (headX == (2 * width) / 3 && (5 <= headY && headY <= 15))
     {
         gameOver = true;
         return;
     }
 
-    // touch walls
     if (headX >= width || headX < 0 || headY >= height || headY < 0)
     {
         gameOver = true;
     }
 
-    // snake bite itself
     for (int i = 0; i < tail_len; i++)
     {
         if (tailx[i] == headX && taily[i] == headY)
@@ -252,30 +272,29 @@ void logic()
         }
     }
 
-    // snake eat fruit
     if (headX == fruitX && headY == fruitY)
     {
         score += 10;
         tail_len++;
-        if (score % 30 == 0 && score > 0)  // Check if the score is a multiple of 30 and greater than 0
+        fruitsEaten++;
+
+        playSound("eat_fruit.wav");
+
+        fruitX = rand() % width;
+        fruitY = rand() % height;
+
+        if (fruitsEaten % 3 == 0)
         {
-            // Generate a special fruit
             specialFruitX = rand() % width;
             specialFruitY = rand() % height;
         }
-        else
-        {
-            // Generate a normal fruit
-            fruitX = rand() % width;
-            fruitY = rand() % height;
-        }
     }
 
-    // snake eat special fruit
     if (headX == specialFruitX && headY == specialFruitY)
     {
-        score += 50;
-        specialFruitX = -1; // Reset special fruit position
+        score += 30;
+        playSound("eat_special.wav");
+        specialFruitX = -1;
         specialFruitY = -1;
     }
 }
