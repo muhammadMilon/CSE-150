@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <Windows.h>
 #include <MMSystem.h>
 #include <mmsystem.h>
@@ -7,6 +8,13 @@
 #include <chrono>
 
 using namespace std;
+
+// Color constants
+const int COLOR_BLACK = 0;
+const int COLOR_GREEN = 2;
+const int COLOR_RED = 12;
+const int COLOR_YELLOW = 14;
+const int COLOR_WHITE = 15;
 
 enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
 Direction dir;
@@ -17,6 +25,7 @@ int headX, headY, fruitX, fruitY, specialFruitX, specialFruitY, score;
 int tailx[100], taily[100];
 int tail_len;
 int fruitsEaten;
+int highestScore = 0;  // Variable to store the highest score
 
 void setup();
 void draw();
@@ -24,6 +33,14 @@ void input();
 void logic();
 void playBackgroundMusic(const char* musicFileName);
 void playSound(const char* soundFileName);
+void setColor(int color);
+void saveHighestScore();
+void loadHighestScore();
+
+void setColor(int color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 
 void playBackgroundMusic(const char* musicFileName)
 {
@@ -35,8 +52,30 @@ void playSound(const char* soundFileName)
     PlaySound(soundFileName, NULL, SND_ASYNC);
 }
 
+void saveHighestScore()
+{
+    ofstream file("highest_score.txt");
+    if (file.is_open())
+    {
+        file << highestScore;
+        file.close();
+    }
+}
+
+void loadHighestScore()
+{
+    ifstream file("highest_score.txt");
+    if (file.is_open())
+    {
+        file >> highestScore;
+        file.close();
+    }
+}
+
 int main()
 {
+    loadHighestScore();  // Load the highest score from the file
+
     char start;
     cout << "\t-------------------------------" << endl;
     cout << "\t\t Simple Snake Game" << endl;
@@ -45,14 +84,12 @@ int main()
     cin >> start;
     if (start == 's') {
         setup();
-       playBackgroundMusic("snake_music.wav");
+        playBackgroundMusic("snake_music.wav");
 
         // Clear the screen once before entering the game loop
         system("cls");
 
         while (!gameOver) {
-               // playBackgroundMusic("hissing.wav");
-
             draw();
             input();
             logic();
@@ -73,16 +110,27 @@ int main()
         // Play the "end_game.wav" sound only once when the game is over
         PlaySound("end_game.wav", NULL, SND_FILENAME);
 
-        // Display the final score
+        // Save the highest score if the current score is higher
+        if (score > highestScore)
+        {
+            highestScore = score;
+            saveHighestScore();
+        }
+
+        // Display the highest score
         cout << "\t--------------------------------------------" << endl;
-        cout << "\t\t Game Over!" << endl<<endl;
-        cout << "\t\t Congratulations! Your Score: " << score << endl;
+        cout << "\t\t Game Over!" << endl << endl;
+        cout << "\t\t Your Score: " << score << endl;
+        cout << "\t\t Highest Score: " << highestScore << endl;
         cout << "\t--------------------------------------------" << endl;
     }
 
     getch();
     return 0;
 }
+
+// Rest of the code remains the same...
+
 
 void setup()
 {
@@ -110,6 +158,7 @@ void draw()
     string gameBoard = "\t\t";
 
     // Upper Border
+    setColor(COLOR_WHITE);
     gameBoard += "\xC9";
     for (int i = 0; i < width; i++)
     {
@@ -121,12 +170,15 @@ void draw()
     for (int i = 0; i < height; i++)
     {
         // left border
+        setColor(COLOR_WHITE);
         gameBoard += "\t\t\xBA";
 
         // extra border in the middle
         if ((2 * width) / 3 == 0 && (5 <= i && i <= 15))
         {
+            setColor(COLOR_YELLOW);
             gameBoard += "\xB3";
+            setColor(COLOR_WHITE);
         }
         else
         {
@@ -136,17 +188,23 @@ void draw()
                 // snake head
                 if (i == headY && j == headX)
                 {
+                    setColor(COLOR_RED);
                     gameBoard += "O";
+                    setColor(COLOR_WHITE);
                 }
                 // special fruit
                 else if (i == specialFruitY && j == specialFruitX)
                 {
+                    setColor(COLOR_RED);
                     gameBoard += "S";
+                    setColor(COLOR_WHITE);
                 }
                 // fruit
                 else if (i == fruitY && j == fruitX)
                 {
+                    setColor(COLOR_GREEN);
                     gameBoard += "*";
+                    setColor(COLOR_WHITE);
                 }
                 // space, snake tail
                 else
@@ -157,7 +215,9 @@ void draw()
                     {
                         if (tailx[k] == j && taily[k] == i)
                         {
+                            setColor(COLOR_RED);
                             gameBoard += "o";
+                            setColor(COLOR_WHITE);
                             print = true;
                         }
                     }
@@ -167,7 +227,9 @@ void draw()
                         // right border
                         if (j == width - 1 && (2 * width) / 3 == 0 && (5 <= i && i <= 15))
                         {
+                            setColor(COLOR_YELLOW);
                             gameBoard += "\xB3";
+                            setColor(COLOR_WHITE);
                         }
                         else
                         {
