@@ -17,15 +17,19 @@ const int COLOR_YELLOW = 14;
 const int COLOR_WHITE = 15;
 
 enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
+enum Difficulty { EASY, MEDIUM, HARD };
+
 Direction dir;
 bool gameOver;
-const int height = 20;
-const int width = 30;
+int height, width, delay;
 int headX, headY, fruitX, fruitY, specialFruitX, specialFruitY, score;
 int tailx[100], taily[100];
 int tail_len;
 int fruitsEaten;
-int highestScore = 0;  // Variable to store the highest score
+int highestScoreEasy = 0;
+int highestScoreMedium = 0;
+int highestScoreHard = 0;
+Difficulty currentDifficulty = MEDIUM; // Default to medium difficulty
 
 void setup();
 void draw();
@@ -36,6 +40,8 @@ void playSound(const char* soundFileName);
 void setColor(int color);
 void saveHighestScore();
 void loadHighestScore();
+void setDifficulty();
+void adjustDifficultyParameters();
 
 void setColor(int color)
 {
@@ -54,21 +60,142 @@ void playSound(const char* soundFileName)
 
 void saveHighestScore()
 {
-    ofstream file("highest_score.txt");
-    if (file.is_open())
+    ofstream file;
+    switch (currentDifficulty)
     {
-        file << highestScore;
+    case EASY:
+        file.open("highest_score_easy.txt");
+        file << highestScoreEasy;
         file.close();
+        break;
+    case MEDIUM:
+        file.open("highest_score_medium.txt");
+        file << highestScoreMedium;
+        file.close();
+        break;
+    case HARD:
+        file.open("highest_score_hard.txt");
+        file << highestScoreHard;
+        file.close();
+        break;
     }
 }
 
 void loadHighestScore()
 {
-    ifstream file("highest_score.txt");
+    ifstream file;
+    string fileName;
+
+    switch (currentDifficulty)
+    {
+    case EASY:
+        fileName = "highest_score_easy.txt";
+        break;
+    case MEDIUM:
+        fileName = "highest_score_medium.txt";
+        break;
+    case HARD:
+        fileName = "highest_score_hard.txt";
+        break;
+    }
+
+    file.open(fileName);
+
     if (file.is_open())
     {
-        file >> highestScore;
+        // Read the highest score from the file
+        switch (currentDifficulty)
+        {
+        case EASY:
+            file >> highestScoreEasy;
+            break;
+        case MEDIUM:
+            file >> highestScoreMedium;
+            break;
+        case HARD:
+            file >> highestScoreHard;
+            break;
+        }
+
         file.close();
+    }
+    else
+    {
+        // If the file doesn't exist, set the highest score to a minimum value
+        switch (currentDifficulty)
+        {
+        case EASY:
+            highestScoreEasy = 0;
+            break;
+        case MEDIUM:
+            highestScoreMedium = 0;
+            break;
+        case HARD:
+            highestScoreHard = 0;
+            break;
+        }
+    }
+}
+
+void setDifficulty()
+{
+    cout << "\tChoose Difficulty:" << endl;
+    cout << "\t1. Easy" << endl;
+    cout << "\t2. Medium" << endl;
+    cout << "\t3. Hard" << endl;
+
+    int choice;
+    cout << "\tEnter your choice (1-3): ";
+    cin >> choice;
+
+    switch (choice)
+    {
+    case 1:
+        currentDifficulty = EASY;
+        break;
+    case 2:
+        currentDifficulty = MEDIUM;
+        break;
+    case 3:
+        currentDifficulty = HARD;
+        break;
+    default:
+        currentDifficulty = MEDIUM;
+        break;
+    }
+
+    // Adjust difficulty parameters based on the chosen difficulty
+    adjustDifficultyParameters();
+}
+
+void adjustDifficultyParameters()
+{
+    switch (currentDifficulty)
+    {
+    case EASY:
+        // Adjust parameters for easy difficulty
+        height = 25;
+        width = 40;
+        delay = 300; // milliseconds
+        break;
+    case MEDIUM:
+        // Adjust parameters for medium difficulty
+        height = 20;
+        width = 30;
+        delay = 200; // milliseconds
+        break;
+    case HARD:
+        // Adjust parameters for hard difficulty
+        height = 10;
+        width = 20;
+        delay = 100; // milliseconds
+        break;
+    default:
+        // Default to medium difficulty parameters
+        height = 20;
+        width = 30;
+        delay = 50; // milliseconds
+        break;
     }
 }
 
@@ -80,8 +207,13 @@ int main()
     cout << "\t-------------------------------" << endl;
     cout << "\t\t Simple Snake Game" << endl;
     cout << "\t-------------------------------" << endl;
+
+    // Choose difficulty level
+    setDifficulty();
+
     cout << "\tPress 's' to start: ";
     cin >> start;
+
     if (start == 's') {
         setup();
         playBackgroundMusic("snake_music.wav");
@@ -94,9 +226,6 @@ int main()
             input();
             logic();
 
-            // Calculate delay based on the score
-            int delay = max(20, 400 - (score * 4)); // Ensure a minimum delay
-
             // Sleep for the calculated duration
             std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 
@@ -108,28 +237,61 @@ int main()
         PlaySound(NULL, NULL, SND_ASYNC);
 
         // Play the "end_game.wav" sound only once when the game is over
-        PlaySound("end_game.wav", NULL, SND_FILENAME);
+        PlaySound("END.wav", NULL, SND_FILENAME);
 
         // Save the highest score if the current score is higher
-        if (score > highestScore)
+        switch (currentDifficulty)
         {
-            highestScore = score;
-            saveHighestScore();
+        case EASY:
+            if (score > highestScoreEasy)
+            {
+                highestScoreEasy = score;
+                saveHighestScore();  // Save the highest score
+            }
+            break;
+        case MEDIUM:
+            if (score > highestScoreMedium)
+            {
+                highestScoreMedium = score;
+                saveHighestScore();  // Save the highest score
+            }
+            break;
+        case HARD:
+            if (score > highestScoreHard)
+            {
+                highestScoreHard = score;
+                saveHighestScore();  // Save the highest score
+            }
+            break;
         }
 
         // Display the highest score
         cout << "\t--------------------------------------------" << endl;
         cout << "\t\t Game Over!" << endl << endl;
         cout << "\t\t Your Score: " << score << endl;
-        cout << "\t\t Highest Score: " << highestScore << endl;
+        cout << "\t\t Highest Score: ";
+        switch (currentDifficulty)
+        {
+        case EASY:
+            cout << highestScoreEasy;
+            break;
+        case MEDIUM:
+            cout << highestScoreMedium;
+            break;
+        case HARD:
+            cout << highestScoreHard;
+            break;
+        }
+        cout << endl;
         cout << "\t--------------------------------------------" << endl;
+
+        // Add a delay before closing the application (optional)
+        std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
     getch();
     return 0;
 }
-
-// Rest of the code remains the same...
 
 void setup()
 {
@@ -314,6 +476,9 @@ void logic()
     default:
         break;
     }
+
+    // Debug output
+    cout << "DEBUG: headX=" << headX << ", headY=" << headY << endl;
 
     if (headX == (2 * width) / 3 && (5 <= headY && headY <= 15))
     {
