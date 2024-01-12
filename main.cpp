@@ -176,28 +176,33 @@ void adjustDifficultyParameters()
         // Adjust parameters for easy difficulty
         height = 25;
         width = 40;
-        delay = 300; // milliseconds
+        delay = 300 - score * 10; // Adjust delay based on score (slower as score increases)
         break;
     case MEDIUM:
         // Adjust parameters for medium difficulty
         height = 20;
         width = 30;
-        delay = 200; // milliseconds
+        delay = 200 - score * 10; // Adjust delay based on score (slower as score increases)
         break;
     case HARD:
         // Adjust parameters for hard difficulty
         height = 10;
         width = 20;
-        delay = 100; // milliseconds
+        delay = 100 - score * 10; // Adjust delay based on score (slower as score increases)
         break;
     default:
         // Default to medium difficulty parameters
         height = 20;
         width = 30;
-        delay = 50; // milliseconds
+        delay = 50 - score * 10; // Adjust delay based on score (slower as score increases)
         break;
     }
+
+    // Ensure that delay doesn't go below a minimum value to prevent the game from becoming too slow
+    if (delay < 10)
+        delay = 10;
 }
+
 
 int main()
 {
@@ -240,47 +245,42 @@ int main()
         PlaySound("END.wav", NULL, SND_FILENAME);
 
         // Save the highest score if the current score is higher
-        switch (currentDifficulty)
-        {
-        case EASY:
-            if (score > highestScoreEasy)
-            {
-                highestScoreEasy = score;
-                saveHighestScore();  // Save the highest score
-            }
-            break;
-        case MEDIUM:
-            if (score > highestScoreMedium)
-            {
-                highestScoreMedium = score;
-                saveHighestScore();  // Save the highest score
-            }
-            break;
-        case HARD:
-            if (score > highestScoreHard)
-            {
-                highestScoreHard = score;
-                saveHighestScore();  // Save the highest score
-            }
-            break;
+        switch (currentDifficulty) {
+            case EASY:
+                if (score > highestScoreEasy) {
+                    highestScoreEasy = score;
+                    saveHighestScore();  // Save the highest score
+                }
+                break;
+            case MEDIUM:
+                if (score > highestScoreMedium) {
+                    highestScoreMedium = score;
+                    saveHighestScore();  // Save the highest score
+                }
+                break;
+            case HARD:
+                if (score > highestScoreHard) {
+                    highestScoreHard = score;
+                    saveHighestScore();  // Save the highest score
+                }
+                break;
         }
 
-        // Display the highest score
+        // Display the highest score and other game over details
         cout << "\t--------------------------------------------" << endl;
         cout << "\t\t Game Over!" << endl << endl;
         cout << "\t\t Your Score: " << score << endl;
         cout << "\t\t Highest Score: ";
-        switch (currentDifficulty)
-        {
-        case EASY:
-            cout << highestScoreEasy;
-            break;
-        case MEDIUM:
-            cout << highestScoreMedium;
-            break;
-        case HARD:
-            cout << highestScoreHard;
-            break;
+        switch (currentDifficulty) {
+            case EASY:
+                cout << highestScoreEasy;
+                break;
+            case MEDIUM:
+                cout << highestScoreMedium;
+                break;
+            case HARD:
+                cout << highestScoreHard;
+                break;
         }
         cout << endl;
         cout << "\t--------------------------------------------" << endl;
@@ -292,6 +292,7 @@ int main()
     getch();
     return 0;
 }
+
 
 void setup()
 {
