@@ -87,7 +87,7 @@ int main()
         playBackgroundMusic("snake_music.wav");
 
         // Clear the screen once before entering the game loop
-        system("cls");
+        std::cout << "\x1B[2J\x1B[H";
 
         while (!gameOver) {
             draw();
@@ -101,7 +101,7 @@ int main()
             std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 
             // Clear the screen before redrawing in the next iteration
-            system("cls");
+            std::cout << "\x1B[2J\x1B[H";
         }
 
         // Stop background music
@@ -130,7 +130,6 @@ int main()
 }
 
 // Rest of the code remains the same...
-
 
 void setup()
 {
