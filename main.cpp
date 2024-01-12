@@ -480,12 +480,6 @@ void logic()
     // Debug output
     cout << "DEBUG: headX=" << headX << ", headY=" << headY << endl;
 
-    if (headX == (2 * width) / 3 && (5 <= headY && headY <= 15))
-    {
-        gameOver = true;
-        return;
-    }
-
     if (headX >= width || headX < 0 || headY >= height || headY < 0)
     {
         gameOver = true;
@@ -525,3 +519,4 @@ void logic()
         specialFruitY = -1;
     }
 }
+
